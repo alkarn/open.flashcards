@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    
+    <title>Bootstrap Open Flashcards</title>
+    
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+  </head>
+  <body>
+    <h2>Open Flashcards</h2>
+    
+    <form class="form-inline" action="#" th:action="@{/flashcards}" th:object="${question}" method="post">
+      <label th:text="'Word: ' + ${question.foreignWord}"></label>
+	  <div class="form-group">
+	    <label for="translate">Translate</label>
+	    <input type="text" th:field="*{answer}" class="form-control" id="translate" autofocus="autofocus" />
+	  </div>
+	  <button type="submit" class="btn btn-default">Check</button>
+	</form>
+	
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+  </body>
+</html>

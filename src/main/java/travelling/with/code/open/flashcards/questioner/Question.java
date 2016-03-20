@@ -8,6 +8,8 @@ public interface Question {
 
 	public String getTranslation();
 
+	public String getAnswer();
+
 	public String getHelpPhrase();
 
 	public Optional<String> getArticle();
