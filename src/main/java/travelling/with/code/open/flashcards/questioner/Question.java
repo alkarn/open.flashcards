@@ -8,11 +8,10 @@ public interface Question {
 
 	public String getTranslation();
 
-	public String getAnswer();
-
 	public String getHelpPhrase();
 
-	public Optional<String> getArticle();
+	// TODO Aticle should be optional, since English for example does not have distinct articles for nouns.
+	public String getArticle();
 
 	public Optional<String> getCategory();
 

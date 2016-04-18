@@ -4,8 +4,6 @@ import java.util.Optional;
 
 public class SimpleQuestion implements Question {
 
-	private String answer;
-
 	private String foreignWord;
 	private String translation;
 	private String helpPhrase;
@@ -41,8 +39,8 @@ public class SimpleQuestion implements Question {
 	}
 
 	@Override
-	public Optional<String> getArticle() {
-		return Optional.of(article);
+	public String getArticle() {
+		return article;
 	}
 
 	@Override
@@ -68,15 +66,6 @@ public class SimpleQuestion implements Question {
 
 	public void setCategory(String category) {
 		this.category = category;
-	}
-
-	@Override
-	public String getAnswer() {
-		return answer;
-	}
-
-	public void setAnswer(String answer) {
-		this.answer = answer;
 	}
 
 }

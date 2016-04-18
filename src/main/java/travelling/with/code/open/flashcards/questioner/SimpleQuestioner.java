@@ -7,7 +7,7 @@ public class SimpleQuestioner implements Questioner {
 
 	@Override
 	public Question generateQuestion() {
-		Question question = new SimpleQuestion("Sonne", "Sun", "", "die", "Nature");
+		Question question = new SimpleQuestion("Sonne", "Sun", "The sun is shining bright!", "die", "Nature");
 		return question;
 	}
 

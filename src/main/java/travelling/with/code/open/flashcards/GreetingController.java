@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import travelling.with.code.open.flashcards.questioner.Answer;
 import travelling.with.code.open.flashcards.questioner.Question;
 import travelling.with.code.open.flashcards.questioner.Questioner;
 import travelling.with.code.open.flashcards.questioner.SimpleQuestion;
@@ -21,13 +22,31 @@ public class GreetingController {
     public String flashCards(Model model) {
 		Question question = questioner.generateQuestion();
         model.addAttribute("question", question);
+        Answer answer = new Answer();
+        model.addAttribute("answer", answer);
         return "bootstrap-flashcards";
 	}
 
 	@RequestMapping(value="/flashcards", method=RequestMethod.POST)
-    public String greetingSubmit(@ModelAttribute SimpleQuestion question, Model model) {
-		model.addAttribute("answer", question.getAnswer());
-        return "answer";
+    public String greetingSubmit(@ModelAttribute("questionArticle") String questionArticle, @ModelAttribute("questionTranslation") String questionTranslation,
+    		@ModelAttribute("question") SimpleQuestion question, @ModelAttribute("answer") Answer answer, Model model) {
+
+		if (questionArticle.equals(answer.getArticle())) {
+			answer.setIsArticleCorrect(true);
+		} else {
+			System.err.println("Wrong article");
+			answer.setIsArticleCorrect(false);;
+		}
+		if (questionArticle.equals(answer.getTranslation())) {
+			answer.setIsTranslationCorrect(true);
+		} else {
+			answer.setIsTranslationCorrect(false);
+			System.err.println();
+		}
+		model.addAttribute("question", question);
+		model.addAttribute("answer", answer);
+
+		return "bootstrap-flashcards";
     }
 
 }

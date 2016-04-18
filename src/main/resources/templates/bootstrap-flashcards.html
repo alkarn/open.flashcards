@@ -9,17 +9,48 @@
     
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" />
   </head>
-  <body>
-    <h2>Open Flashcards</h2>
+  <body style="background-color:#b1b1b1;">
+  
+    <h2 class="text-center">Open Flashcards</h2>
     
-    <form class="form-inline" action="#" th:action="@{/flashcards}" th:object="${question}" method="post">
-      <label th:text="'Word: ' + ${question.foreignWord}"></label>
+    <h3 class="col-sm-offset-2 col-sm-10"><label th:text="'Word: ' + ${question.foreignWord}"></label></h3>
+    
+    <form class="form-horizontal" action="#" th:action="@{/flashcards}" method="post">
+      
+      <input type="hidden" th:value="${question.article}" name="questionArticle" />
+      <input type="hidden" th:value="${question.translation}" name="questionTranslation" />
+    
 	  <div class="form-group">
-	    <label for="translate">Translate</label>
-	    <input type="text" th:field="*{answer}" class="form-control" id="translate" autofocus="autofocus" />
+	    <label for="article" class="col-sm-2 control-label">Article</label>
+	    <div class="col-sm-6">
+          <input type="text" th:field="${answer.article}" class="form-control" id="article" autofocus="autofocus" />
+        </div>
+        <div class="col-sm-1" th:switch="${answer.isArticleCorrect}">
+          <p th:case="true"><span class="glyphicon glyphicon-ok" ></span></p>
+          <p th:case="false"><span class="glyphicon glyphicon-remove" ></span></p>
+        </div>
 	  </div>
-	  <button type="submit" class="btn btn-default">Check</button>
+	  <div class="form-group">
+        <label for="translate" class="col-sm-2 control-label">Translate</label>
+	    <div class="col-sm-6">
+	      <input type="text" th:field="${answer.translation}" class="form-control" id="translate" />
+	    </div>
+	  </div>
+	  <div class="form-group">
+	    <div class="col-sm-offset-2 col-sm-10">
+  	      <button type="submit" class="btn btn-primary">Answer!</button>
+          <button class="btn btn-default" type="button" data-toggle="collapse" data-target="#helpPhrase" aria-expanded="false" aria-controls="helpPhrase">
+	         Press for help :)
+          </button>
+	    </div>
+	  </div>
 	</form>
+	
+	<div class="collapse" id="helpPhrase">
+	  <div class="well">
+	    <p th:text="${question.helpPhrase}"></p>
+	  </div>
+    </div>
 	
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="bootstrap/js/bootstrap.min.js"></script>
