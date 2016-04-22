@@ -13,7 +13,7 @@ import travelling.with.code.open.flashcards.dao.Question;
 import travelling.with.code.open.flashcards.dao.QuestionsRepository;
 
 @Component
-public class SimpleQuestioner implements Questioner {
+public class MongoQuestioner implements Questioner {
 
     @Autowired
     private QuestionsRepository questionRepository;
