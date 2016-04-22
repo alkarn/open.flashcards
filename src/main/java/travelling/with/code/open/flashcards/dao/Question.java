@@ -4,28 +4,36 @@ import org.springframework.data.annotation.Id;
 
 public class Question  {
 
+    public static int MAX_DIFFICULTY = 10000;
+    public static int MIN_DIFFICULTY = 0;
+
     @Id
 	private String word;
 	private String article;
-	private String userArticle;
-	private Boolean isArticleCorrect;
 	private String translation;
-	private String userTranslation;
-	private Boolean isTranslationCorrect;
 	private String helpPhrase;
 	private String category;
+	private Integer difficulty = MAX_DIFFICULTY;
 
 	public Question() {
-		super();
+	    super();
 	}
 
 	public Question(String word, String translation, String helpPhrase, String article, String category) {
-		super();
 		this.word = word;
 		this.translation = translation;
 		this.helpPhrase = helpPhrase;
 		this.article = article;
 		this.category = category;
+	}
+
+	public Question(AnsweredQuestion answeredQuestion) {
+	    this.word = answeredQuestion.getWord();
+        this.translation = answeredQuestion.getTranslation();
+        this.helpPhrase = answeredQuestion.getHelpPhrase();
+        this.article = answeredQuestion.getArticle();
+        this.category = answeredQuestion.getCategory();
+        this.difficulty = answeredQuestion.getDifficulty();
 	}
 
     public String getWord() {
@@ -44,28 +52,12 @@ public class Question  {
         this.article = article;
     }
 
-    public String getUserArticle() {
-        return userArticle;
-    }
-
-    public void setUserArticle(String userArticle) {
-        this.userArticle = userArticle;
-    }
-
     public String getTranslation() {
         return translation;
     }
 
     public void setTranslation(String translation) {
         this.translation = translation;
-    }
-
-    public String getUserTranslation() {
-        return userTranslation;
-    }
-
-    public void setUserTranslation(String userTranslation) {
-        this.userTranslation = userTranslation;
     }
 
     public String getHelpPhrase() {
@@ -84,20 +76,12 @@ public class Question  {
         this.category = category;
     }
 
-    public Boolean getIsArticleCorrect() {
-        return isArticleCorrect;
+    public Integer getDifficulty() {
+        return difficulty;
     }
 
-    public void setIsArticleCorrect(Boolean isArticleCorrect) {
-        this.isArticleCorrect = isArticleCorrect;
-    }
-
-    public Boolean getIsTranslationCorrect() {
-        return isTranslationCorrect;
-    }
-
-    public void setIsTranslationCorrect(Boolean isTranslationCorrect) {
-        this.isTranslationCorrect = isTranslationCorrect;
+    public void setDifficulty(Integer difficulty) {
+        this.difficulty = difficulty;
     }
 
 }

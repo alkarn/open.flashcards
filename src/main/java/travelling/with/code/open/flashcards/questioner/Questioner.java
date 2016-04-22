@@ -2,6 +2,7 @@ package travelling.with.code.open.flashcards.questioner;
 
 import java.util.Optional;
 
+import travelling.with.code.open.flashcards.dao.AnsweredQuestion;
 import travelling.with.code.open.flashcards.dao.Question;
 
 public interface Questioner {
@@ -14,6 +15,12 @@ public interface Questioner {
      */
 	public Optional<Question> generateQuestion();
 
-	public void evaluateAnswer(String word, boolean result);
+	/**
+	 * Should be called after the user has answered the specific question, to evaluate the question and how
+	 * often it should be repeated based on user's answer.
+	 *
+	 * @param question - the answered question.
+	 */
+	public void evaluateQuestion(AnsweredQuestion question);
 
 }

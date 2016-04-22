@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import travelling.with.code.open.flashcards.dao.AnsweredQuestion;
 import travelling.with.code.open.flashcards.dao.Question;
 import travelling.with.code.open.flashcards.dao.QuestionsRepository;
 import travelling.with.code.open.flashcards.questioner.Questioner;
@@ -45,15 +46,15 @@ public class FlashcardController {
 	@RequestMapping(value="/flashcards-test", method=RequestMethod.GET)
     public String test(Model model) {
 		Optional<Question> question = questioner.generateQuestion();
-        model.addAttribute("question", question.get());
+        model.addAttribute("question", new AnsweredQuestion(question.get()));
         return "question";
 	}
 
 	@RequestMapping(value="/flashcards-test", method=RequestMethod.POST)
-    public String testEvaluate(@ModelAttribute("question") Question question, Model model) {
+    public String testEvaluate(@ModelAttribute("question") AnsweredQuestion question, Model model) {
 	    question.setIsArticleCorrect(question.getArticle().equalsIgnoreCase(question.getUserArticle()) ? true : false);
 	    question.setIsTranslationCorrect(question.getTranslation().equalsIgnoreCase(question.getUserTranslation()) ? true : false);
-	    questioner.evaluateAnswer(question.getWord(), question.getIsArticleCorrect() && question.getIsTranslationCorrect());
+	    questioner.evaluateQuestion(question);
 		model.addAttribute("question", question);
 		return "answer";
     }

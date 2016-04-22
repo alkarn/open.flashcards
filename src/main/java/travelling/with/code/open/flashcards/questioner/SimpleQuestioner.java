@@ -8,6 +8,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import travelling.with.code.open.flashcards.dao.AnsweredQuestion;
 import travelling.with.code.open.flashcards.dao.Question;
 import travelling.with.code.open.flashcards.dao.QuestionsRepository;
 
@@ -15,7 +16,7 @@ import travelling.with.code.open.flashcards.dao.QuestionsRepository;
 public class SimpleQuestioner implements Questioner {
 
     @Autowired
-    private QuestionsRepository wordRepository;
+    private QuestionsRepository questionRepository;
 
     private Set<Question> bufferedQuestions = new HashSet<>();
     private Iterator<Question> questionIterator = bufferedQuestions.iterator();
@@ -34,12 +35,23 @@ public class SimpleQuestioner implements Questioner {
 
 	private void bufferQuestions() {
         bufferedQuestions.clear();
-	    bufferedQuestions.addAll(wordRepository.findAll());
+	    bufferedQuestions.addAll(questionRepository.findAll());
 	    questionIterator = bufferedQuestions.iterator();
 	}
 
     @Override
-    public void evaluateAnswer(String word, boolean result) {
+    public void evaluateQuestion(AnsweredQuestion answeredQuestion) {
+        if (answeredQuestion.getDifficulty() < (Question.MAX_DIFFICULTY - Question.MIN_DIFFICULTY) * 1 / 10) {
+            answeredQuestion.setDifficulty((Question.MAX_DIFFICULTY - Question.MIN_DIFFICULTY) / 2);
+        }
+        if (answeredQuestion.getIsArticleCorrect()) {
+            answeredQuestion.setDifficulty(answeredQuestion.getDifficulty() * 4 / 5);
+        }
+        if (answeredQuestion.getIsTranslationCorrect()) {
+            answeredQuestion.setDifficulty(answeredQuestion.getDifficulty() / 2);
+        }
+        Question question = new  Question(answeredQuestion);
+        questionRepository.save(question);
     }
 
 }
