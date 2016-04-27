@@ -23,6 +23,11 @@ public class FlashcardController {
 	@Autowired
 	private QuestionsRepository repository;
 
+	@RequestMapping(value="/flashcards", method=RequestMethod.GET)
+	public String index() {
+	    return "index";
+	}
+
 	@RequestMapping(value="/flashcards-add", method=RequestMethod.GET)
 	public String add(Model model) {
 	    model.addAttribute("question", new Question());

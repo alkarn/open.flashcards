@@ -5,16 +5,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     
-    <title>Bootstrap Open Flashcards | Add</title>
+    <title>Open Flashcards | Add</title>
     
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" />
   </head>
   <body>
-  
-  <div class="col-sm-4" th:switch="*{isTranslationCorrect}">
-          <p th:case="true"><span class="glyphicon glyphicon-ok text-success" ></span></p>
-          <p th:case="false"><span class="glyphicon glyphicon-remove text-danger" ></span> <label class="text-danger" th:text="*{translation}"></label></p>
-        </div>
   
     <div th:switch="${addResult}">
 	    <div th:case="success" class="alert alert-success">
@@ -24,40 +19,51 @@
         <label th:text="${errorMessage}"></label>
       </div>
     </div>
-  
-    <h2 class="col-sm-10 col-sm-offset-2">Open Flashcards - Add new word</h2>
-    
-    <form class="form-horizontal" action="#" th:action="@{/flashcards-add}" th:object="${question}" method="post">
-      <div class="form-group">
-        <label for="word" class="col-sm-2 control-label">Word</label>
-        <div class="col-sm-6">
-          <input type="text" th:field="*{word}" class="form-control" id="word" autofocus="autofocus" />
+
+    <div class="container">
+      <div class="row">
+        <div class="page-header">
+          <h1><a href="flashcards">Open Flashcards</a></h1>
         </div>
       </div>
-		  <div class="form-group">
-		    <label for="article" class="col-sm-2 control-label">Article</label>
-		    <div class="col-sm-6">
-          <input type="text" th:field="*{article}" class="form-control" id="article" />
-        </div>
-		  </div>
-		  <div class="form-group">
-	      <label for="translation" class="col-sm-2 control-label">Translation</label>
-		    <div class="col-sm-6">
-		      <input type="text" th:field="*{translation}" class="form-control" id="translation" />
-		    </div>
-		  </div>
-		  <div class="form-group">
-	      <label for="helpPhrase" class="col-sm-2 control-label">Help Phrase</label>
-		    <div class="col-sm-6">
-		      <textarea th:field="*{helpPhrase}" class="form-control" id="helpPhrase">Insert help phrase...</textarea>
-		    </div>
-		  </div>
-		  <div class="form-group">
-		    <div class="col-sm-offset-2 col-sm-10">
-	  	      <button type="submit" class="btn btn-primary">Add</button>
-		    </div>
-		  </div>
-		</form>
+      <div class="row">
+        <h2 class="col-sm-offset-2 text-primary">Add a new word</h2>
+        <br/>
+      </div>
+	    <div class="row">
+	      <form class="form-horizontal" action="#" th:action="@{/flashcards-add}" th:object="${question}" method="post">
+		      <div class="form-group">
+		        <label for="word" class="col-sm-2 control-label">Word</label>
+		        <div class="col-sm-6">
+		          <input type="text" th:field="*{word}" class="form-control" id="word" autofocus="autofocus" />
+		        </div>
+		      </div>
+		      <div class="form-group">
+		        <label for="article" class="col-sm-2 control-label">Article</label>
+		        <div class="col-sm-6">
+		          <input type="text" th:field="*{article}" class="form-control" id="article" />
+		        </div>
+		      </div>
+		      <div class="form-group">
+		        <label for="translation" class="col-sm-2 control-label">Translation</label>
+		        <div class="col-sm-6">
+		          <input type="text" th:field="*{translation}" class="form-control" id="translation" />
+		        </div>
+		      </div>
+		      <div class="form-group">
+		        <label for="helpPhrase" class="col-sm-2 control-label">Help Phrase</label>
+		        <div class="col-sm-6">
+		          <textarea th:field="*{helpPhrase}" class="form-control" id="helpPhrase">Insert help phrase...</textarea>
+		        </div>
+		      </div>
+		      <div class="form-group">
+		        <div class="col-sm-offset-2 col-sm-10">
+		            <button type="submit" class="btn btn-info">Add</button>
+		        </div>
+		      </div>
+		    </form>    
+	    </div>
+	  </div>
 		
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="bootstrap/js/bootstrap.min.js"></script>
