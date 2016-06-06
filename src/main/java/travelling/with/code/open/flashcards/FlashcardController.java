@@ -1,6 +1,8 @@
 package travelling.with.code.open.flashcards;
 
-import java.util.Optional;
+import java.util.Enumeration;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,9 +11,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import travelling.with.code.open.flashcards.dao.AnsweredQuestion;
-import travelling.with.code.open.flashcards.dao.Question;
-import travelling.with.code.open.flashcards.dao.QuestionsRepository;
+import travelling.with.code.open.flashcards.dao.Noun;
+import travelling.with.code.open.flashcards.dao.NounQuestion;
+import travelling.with.code.open.flashcards.dao.OldQuestion;
+import travelling.with.code.open.flashcards.dao.OldQuestionsRepository;
 import travelling.with.code.open.flashcards.questioner.Questioner;
 
 @Controller
@@ -21,7 +24,7 @@ public class FlashcardController {
 	private Questioner questioner;
 
 	@Autowired
-	private QuestionsRepository repository;
+	private OldQuestionsRepository repository;
 
 	@RequestMapping(value="/flashcards", method=RequestMethod.GET)
 	public String index() {
@@ -30,12 +33,12 @@ public class FlashcardController {
 
 	@RequestMapping(value="/flashcards-add", method=RequestMethod.GET)
 	public String add(Model model) {
-	    model.addAttribute("question", new Question());
+	    model.addAttribute("question", new OldQuestion());
 	    return "add";
 	}
 
 	@RequestMapping(value="flashcards-add", method=RequestMethod.POST)
-	public String add(@ModelAttribute("question") Question question, Model model) {
+	public String add(@ModelAttribute("question") OldQuestion question, Model model) {
 	    if (repository.exists(question.getWord())) {
 	        model.addAttribute("addResult", "error");
 	        model.addAttribute("errorMessage", "The word '" + question.getWord() + "' already exists.");
@@ -44,24 +47,49 @@ public class FlashcardController {
 	        model.addAttribute("addResult", "success");
 	        model.addAttribute("successMessage", "The word '" + question.getWord() + "' was successfully added in the database");
 	    }
-	    model.addAttribute("question", new Question());
+	    model.addAttribute("question", new OldQuestion());
 	    return "add";
 	}
 
 	@RequestMapping(value="/flashcards-test", method=RequestMethod.GET)
     public String test(Model model) {
-		Optional<Question> question = questioner.generateQuestion();
-        model.addAttribute("question", new AnsweredQuestion(question.get()));
-        return "question";
+//		Noun noun = questioner.generateNoun();
+//		Question<Noun> question = new Question<Noun>(noun);
+	    Noun noun = new Noun("Sonne", "sun", "The sun is shining.", "die");
+	    NounQuestion question = new NounQuestion(noun);
+        model.addAttribute("question", question);
+        return "question-noun";
 	}
 
 	@RequestMapping(value="/flashcards-test", method=RequestMethod.POST)
-    public String testEvaluate(@ModelAttribute("question") AnsweredQuestion question, Model model) {
-	    question.setIsArticleCorrect(question.getArticle().equalsIgnoreCase(question.getUserArticle()) ? true : false);
-	    question.setIsTranslationCorrect(question.getTranslation().equalsIgnoreCase(question.getUserTranslation()) ? true : false);
-	    questioner.evaluateQuestion(question);
-		model.addAttribute("question", question);
-		return "answer";
+    public String testEvaluate(Model model, HttpServletRequest request, @ModelAttribute("question") NounQuestion question) {
+//	    question.setIsArticleCorrect(question.getArticle().equalsIgnoreCase(question.getUserArticle()) ? true : false);
+//	    question.setIsTranslationCorrect(question.getTranslation().equalsIgnoreCase(question.getUserTranslation()) ? true : false);
+//	    questioner.evaluateQuestion(question);
+//		model.addAttribute("question", question);
+	    Enumeration<String> parameterNames = request.getParameterNames();
+	    while (parameterNames.hasMoreElements()) {
+	        String parameter = parameterNames.nextElement();
+	        System.out.println(parameter + " : " + request.getParameter(parameter));
+	    }
+	    System.out.println("--------------- hola");
+
+		return "answer-mufa";
     }
+//	@RequestMapping(value="/flashcards-test", method=RequestMethod.GET)
+//	public String test(Model model) {
+//	    Optional<OldQuestion> question = questioner.generateQuestion();
+//	    model.addAttribute("question", new OldAnsweredQuestion(question.get()));
+//	    return "question";
+//	}
+//
+//	@RequestMapping(value="/flashcards-test", method=RequestMethod.POST)
+//	public String testEvaluate(@ModelAttribute("question") OldAnsweredQuestion question, Model model) {
+//	    question.setIsArticleCorrect(question.getArticle().equalsIgnoreCase(question.getUserArticle()) ? true : false);
+//	    question.setIsTranslationCorrect(question.getTranslation().equalsIgnoreCase(question.getUserTranslation()) ? true : false);
+//	    questioner.evaluateQuestion(question);
+//	    model.addAttribute("question", question);
+//	    return "answer";
+//	}
 
 }

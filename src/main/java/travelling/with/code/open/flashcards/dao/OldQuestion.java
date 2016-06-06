@@ -2,7 +2,7 @@ package travelling.with.code.open.flashcards.dao;
 
 import org.springframework.data.annotation.Id;
 
-public class Question  {
+public class OldQuestion  {
 
     public static int MAX_DIFFICULTY = 10000;
     public static int MIN_DIFFICULTY = 0;
@@ -15,11 +15,11 @@ public class Question  {
 	private String category;
 	private Integer difficulty = MAX_DIFFICULTY;
 
-	public Question() {
+	public OldQuestion() {
 	    super();
 	}
 
-	public Question(String word, String translation, String helpPhrase, String article, String category) {
+	public OldQuestion(String word, String translation, String helpPhrase, String article, String category) {
 		this.word = word;
 		this.translation = translation;
 		this.helpPhrase = helpPhrase;
@@ -27,7 +27,7 @@ public class Question  {
 		this.category = category;
 	}
 
-	public Question(AnsweredQuestion answeredQuestion) {
+	public OldQuestion(OldAnsweredQuestion answeredQuestion) {
 	    this.word = answeredQuestion.getWord();
         this.translation = answeredQuestion.getTranslation();
         this.helpPhrase = answeredQuestion.getHelpPhrase();

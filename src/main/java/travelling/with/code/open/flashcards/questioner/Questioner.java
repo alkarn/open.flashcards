@@ -2,8 +2,9 @@ package travelling.with.code.open.flashcards.questioner;
 
 import java.util.Optional;
 
-import travelling.with.code.open.flashcards.dao.AnsweredQuestion;
-import travelling.with.code.open.flashcards.dao.Question;
+import travelling.with.code.open.flashcards.dao.Noun;
+import travelling.with.code.open.flashcards.dao.OldAnsweredQuestion;
+import travelling.with.code.open.flashcards.dao.OldQuestion;
 
 public interface Questioner {
 
@@ -13,7 +14,7 @@ public interface Questioner {
      *
      * @return the next question for the user to answer or null if there are no available questions.
      */
-	public Optional<Question> generateQuestion();
+	public Optional<OldQuestion> generateQuestion();
 
 	/**
 	 * Should be called after the user has answered the specific question, to evaluate the question and how
@@ -21,6 +22,8 @@ public interface Questioner {
 	 *
 	 * @param question - the answered question.
 	 */
-	public void evaluateQuestion(AnsweredQuestion question);
+	public void evaluateQuestion(OldAnsweredQuestion question);
+
+	public Noun generateNoun();
 
 }

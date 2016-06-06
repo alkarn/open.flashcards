@@ -1,21 +1,21 @@
 package travelling.with.code.open.flashcards.dao;
 
-public class AnsweredQuestion extends Question {
+public class OldAnsweredQuestion extends OldQuestion {
 
     private String userArticle;
     private Boolean isArticleCorrect;
     private String userTranslation;
     private Boolean isTranslationCorrect;
 
-    public AnsweredQuestion() {
+    public OldAnsweredQuestion() {
         super();
     }
 
-    public AnsweredQuestion(String word, String translation, String helpPhrase, String article, String category) {
+    public OldAnsweredQuestion(String word, String translation, String helpPhrase, String article, String category) {
         super(word, translation, helpPhrase, article, category);
     }
 
-    public AnsweredQuestion(Question question) {
+    public OldAnsweredQuestion(OldQuestion question) {
         setWord(question.getWord());
         setTranslation(question.getTranslation());
         setArticle(question.getArticle());
