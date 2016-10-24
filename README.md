@@ -21,17 +21,17 @@ Docker Compose makes use of Docker Engine and orchestrates the actions that need
 
 To create the data-only container:
 
-    docker create -v /data/db --name data_container ubuntu
+    docker create -v /data/db --name data_container ubuntu:16.04
 
 To create the database container and run it linked to the data-only container:
 
-    docker build --tag atrav/mongo -f Dockerfile_MongoDB .
-    docker run -d --volumes-from data_container --name mongo atrav/mongo
+    docker build --tag alkarn/mongodb -f Dockerfile_MongoDB .
+    docker run -d --volumes-from data_container --name mongodb alkarn/mongodb
 
 To create the application container and run it linked to the database container:
 
     docker build --tag atrav/flashcards .
-    docker run -d -p 8090:8080 --link mongo:mongo --name flashcards atrav/flashcards 
+    docker run -d -p 8090:8080 --link mongodb:mongodb --name flashcards atrav/flashcards 
     
 Then you can browse at [http://localhost:8090/flashcards](http://localhost:8090/flashcards).
 
