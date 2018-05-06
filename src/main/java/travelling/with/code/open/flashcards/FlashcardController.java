@@ -37,19 +37,19 @@ public class FlashcardController {
 	    return "add";
 	}
 
-	@RequestMapping(value="flashcards-add", method=RequestMethod.POST)
-	public String add(@ModelAttribute("question") OldQuestion question, Model model) {
-	    if (repository.exists(question.getWord())) {
-	        model.addAttribute("addResult", "error");
-	        model.addAttribute("errorMessage", "The word '" + question.getWord() + "' already exists.");
-	    } else {
-	        repository.insert(question);
-	        model.addAttribute("addResult", "success");
-	        model.addAttribute("successMessage", "The word '" + question.getWord() + "' was successfully added in the database");
-	    }
-	    model.addAttribute("question", new OldQuestion());
-	    return "add";
-	}
+//	@RequestMapping(value="flashcards-add", method=RequestMethod.POST)
+//	public String add(@ModelAttribute("question") OldQuestion question, Model model) {
+//	    if (repository.exists(question.getWord())) {
+//	        model.addAttribute("addResult", "error");
+//	        model.addAttribute("errorMessage", "The word '" + question.getWord() + "' already exists.");
+//	    } else {
+//	        repository.insert(question);
+//	        model.addAttribute("addResult", "success");
+//	        model.addAttribute("successMessage", "The word '" + question.getWord() + "' was successfully added in the database");
+//	    }
+//	    model.addAttribute("question", new OldQuestion());
+//	    return "add";
+//	}
 
 	@RequestMapping(value="/flashcards-test", method=RequestMethod.GET)
     public String test(Model model) {
