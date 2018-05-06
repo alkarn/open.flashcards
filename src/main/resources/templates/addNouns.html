@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     
-    <title>Open Flashcards | Add</title>
+    <title>Open Flashcards | Add Nouns</title>
     
     <!-- Bootstrap 3.3.7 -->
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link>
@@ -28,15 +28,15 @@
         </div>
       </div>
       <div class="row">
-        <h2 class="col-sm-offset-2 text-primary">Add a new word</h2>
+        <h2 class="col-sm-offset-2 text-primary">Add a new noun</h2>
         <br/>
       </div>
 	    <div class="row">
-	      <form class="form-horizontal" action="#" th:action="@{/flashcards-add}" th:object="${question}" method="post">
+	      <form class="form-horizontal" action="#" th:action="@{/flashcards/add/nouns}" th:object="${noun}" method="post">
 		      <div class="form-group">
-		        <label for="word" class="col-sm-2 control-label">Word</label>
+		        <label for="noun" class="col-sm-2 control-label">Noun</label>
 		        <div class="col-sm-6">
-		          <input type="text" th:field="*{word}" class="form-control" id="word" autofocus="autofocus" />
+		          <input type="text" th:field="*{literal}" class="form-control" id="noun" autofocus="autofocus" />
 		        </div>
 		      </div>
 		      <div class="form-group">

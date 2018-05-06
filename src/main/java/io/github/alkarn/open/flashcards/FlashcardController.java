@@ -12,30 +12,59 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import io.github.alkarn.open.flashcards.dao.Noun;
+import io.github.alkarn.open.flashcards.dao.NounDto;
 import io.github.alkarn.open.flashcards.dao.NounQuestion;
+import io.github.alkarn.open.flashcards.dao.NounRepository;
 import io.github.alkarn.open.flashcards.dao.OldQuestion;
-import io.github.alkarn.open.flashcards.dao.OldQuestionsRepository;
-import io.github.alkarn.open.flashcards.questioner.Questioner;
+import io.github.alkarn.tools.AddResult;
+import io.github.alkarn.tools.Evaluator;
+import io.github.alkarn.tools.Transformer;
 
 @Controller
 public class FlashcardController {
 
-	@Autowired
-	private Questioner questioner;
+    @Autowired
+    private NounRepository nounRepository;
 
 	@Autowired
-	private OldQuestionsRepository repository;
+	private Evaluator evaluator;
+
+	@Autowired
+	private Transformer transformer;
+
 
 	@RequestMapping(value="/flashcards", method=RequestMethod.GET)
 	public String index() {
 	    return "index";
 	}
 
-	@RequestMapping(value="/flashcards-add", method=RequestMethod.GET)
+	@RequestMapping(value="/flashcards/add", method=RequestMethod.GET)
 	public String add(Model model) {
 	    model.addAttribute("question", new OldQuestion());
 	    return "add";
 	}
+
+	@RequestMapping(value="/flashcards/add/nouns", method=RequestMethod.GET)
+	public String addNounForm(Model model) {
+	    model.addAttribute("noun", new NounDto());
+	    return "addNouns";
+	}
+
+	@RequestMapping(value="/flashcards/add/nouns", method=RequestMethod.POST)
+    public String addNounSubmit(Model model, @ModelAttribute NounDto newNoun) {
+	    if (evaluator.isValid(newNoun)) {
+	        nounRepository.save(transformer.transform(newNoun));
+	        model.addAttribute(AddResult.ADD_RESULT, AddResult.SUCCESS);
+	        model.addAttribute(AddResult.SUCCESS_MESSAGE, evaluator.getSuccessMessage(newNoun));
+	        model.addAttribute("noun", new NounDto());
+	    } else {
+	        model.addAttribute(AddResult.ADD_RESULT, AddResult.ERROR);
+	        model.addAttribute(AddResult.ERROR_MESSAGE, evaluator.getErrorMessage(newNoun));
+	        model.addAttribute("noun", newNoun);
+	    }
+	    return "addNouns";
+
+    }
 
 //	@RequestMapping(value="flashcards-add", method=RequestMethod.POST)
 //	public String add(@ModelAttribute("question") OldQuestion question, Model model) {
