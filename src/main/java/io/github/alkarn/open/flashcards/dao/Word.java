@@ -5,7 +5,7 @@ import org.springframework.data.annotation.Id;
 /**
  * A class that represents a word of the language the user is trying to learn.
  *
- * @author <a href="mailto:travelling.with.code@gmail.com">Alex</a>
+ * @author <a href="mailto:alex.a.karnezis@gmail.com">Alex</a>
  */
 public class Word {
 

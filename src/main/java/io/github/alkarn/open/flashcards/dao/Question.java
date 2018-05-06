@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 /**
  * A class that corresponds to  a question that will be asked to a user.
  *
- * @author <a href="mailto:travelling.with.code@gmail.com">Alex</a>
+ * @author <a href="mailto:alex.a.karnezis@gmail.com">Alex</a>
  */
 public class Question<T extends Word> {
 
