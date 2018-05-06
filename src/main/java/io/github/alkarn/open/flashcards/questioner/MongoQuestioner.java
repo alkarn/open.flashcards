@@ -1,63 +1,38 @@
 package io.github.alkarn.open.flashcards.questioner;
 
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Optional;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import io.github.alkarn.open.flashcards.dao.Noun;
-import io.github.alkarn.open.flashcards.dao.OldAnsweredQuestion;
-import io.github.alkarn.open.flashcards.dao.OldQuestion;
-import io.github.alkarn.open.flashcards.dao.OldQuestionsRepository;
+import io.github.alkarn.open.flashcards.dao.NounQuestion;
+import io.github.alkarn.open.flashcards.dao.NounRepository;
 
 @Component
 public class MongoQuestioner implements Questioner {
 
     @Autowired
-    private OldQuestionsRepository questionRepository;
-
-    private Set<OldQuestion> bufferedQuestions = new HashSet<>();
-    private Iterator<OldQuestion> questionIterator = bufferedQuestions.iterator();
-
-	@Override
-	public Optional<OldQuestion> generateQuestion() {
-	    if (!questionIterator.hasNext()) {
-	        bufferQuestions();
-	    }
-	    if (questionIterator.hasNext()) {
-	        return Optional.of(questionIterator.next());
-	    } else {
-	        return Optional.of(null);
-	    }
-	}
-
-	private void bufferQuestions() {
-        bufferedQuestions.clear();
-	    bufferedQuestions.addAll(questionRepository.findAll());
-	    questionIterator = bufferedQuestions.iterator();
-	}
+    private NounRepository nounRepository;
 
     @Override
-    public void evaluateQuestion(OldAnsweredQuestion answeredQuestion) {
-        if (answeredQuestion.getDifficulty() < (OldQuestion.MAX_DIFFICULTY - OldQuestion.MIN_DIFFICULTY) * 1 / 10) {
-            answeredQuestion.setDifficulty((OldQuestion.MAX_DIFFICULTY - OldQuestion.MIN_DIFFICULTY) / 2);
-        }
-        if (answeredQuestion.getIsArticleCorrect()) {
-            answeredQuestion.setDifficulty(answeredQuestion.getDifficulty() * 4 / 5);
-        }
-        if (answeredQuestion.getIsTranslationCorrect()) {
-            answeredQuestion.setDifficulty(answeredQuestion.getDifficulty() / 2);
-        }
-        OldQuestion question = new  OldQuestion(answeredQuestion);
-        questionRepository.save(question);
+    public Optional<NounQuestion> generateNounQuestion() {
+        return Optional.ofNullable(new NounQuestion(nounRepository.findAll().get(0).getLiteral()));
     }
 
-    @Override
-    public Noun generateNoun() {
-        return new Noun("Sonne", "sun", "The sun is shining.", "die");
-    }
+//    @Override
+//    public void evaluateQuestion(OldAnsweredQuestion answeredQuestion) {
+//        if (answeredQuestion.getDifficulty() < (OldQuestion.MAX_DIFFICULTY - OldQuestion.MIN_DIFFICULTY) * 1 / 10) {
+//            answeredQuestion.setDifficulty((OldQuestion.MAX_DIFFICULTY - OldQuestion.MIN_DIFFICULTY) / 2);
+//        }
+//        if (answeredQuestion.getIsArticleCorrect()) {
+//            answeredQuestion.setDifficulty(answeredQuestion.getDifficulty() * 4 / 5);
+//        }
+//        if (answeredQuestion.getIsTranslationCorrect()) {
+//            answeredQuestion.setDifficulty(answeredQuestion.getDifficulty() / 2);
+//        }
+//        OldQuestion question = new  OldQuestion(answeredQuestion);
+//        questionRepository.save(question);
+//    }
+
 
 }

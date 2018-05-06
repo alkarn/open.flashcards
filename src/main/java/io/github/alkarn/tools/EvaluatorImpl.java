@@ -1,8 +1,19 @@
 package io.github.alkarn.tools;
 
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import io.github.alkarn.open.flashcards.dao.Noun;
 import io.github.alkarn.open.flashcards.dao.NounDto;
+import io.github.alkarn.open.flashcards.dao.NounQuestion;
+import io.github.alkarn.open.flashcards.dao.NounRepository;
 
 public class EvaluatorImpl implements Evaluator {
+
+    @Autowired
+    NounRepository nounRepository;
+
 
     @Override
     public boolean isValid(NounDto nounDto) {
@@ -33,6 +44,26 @@ public class EvaluatorImpl implements Evaluator {
         } else {
             return "An unexpected error occured. If you continue having problems, please contact administrator at " + Administration.ADMIN_EMAIL;
         }
+    }
+
+    @Override
+    public boolean evaluateUserAnswer(NounQuestion nounQuestion) throws Exception {
+        if (nounQuestion.getUserTranslation() == null || nounQuestion.getUserTranslation().isEmpty() ||
+            nounQuestion.getUserArticle() == null || nounQuestion.getUserArticle().isEmpty()) {
+            return false;
+        }
+
+        Optional<Noun> noun = nounRepository.findById(nounQuestion.getLiteral());
+        if (noun.isPresent()) {
+            if (noun.get().getTranslation().equals(nounQuestion.getUserTranslation()) && noun.get().getArticle().equals(nounQuestion.getUserArticle())) {
+                return true;
+            } else
+                return false;
+        } else {
+            // TODO This is an extreme case. How do we handle?
+            throw new Exception();
+        }
+
     }
 
 }

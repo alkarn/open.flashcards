@@ -1,15 +1,11 @@
 package io.github.alkarn.open.flashcards.dao;
 
-public class NounQuestion {
+public class NounQuestionDto {
 
     private String literal;
     private String helpPhrase;
     private String userTranslation;
     private String userArticle;
-
-    public NounQuestion(String literal) {
-        this.literal = literal;
-    }
 
     public String getLiteral() {
         return literal;
