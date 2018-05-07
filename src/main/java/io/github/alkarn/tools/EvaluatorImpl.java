@@ -8,6 +8,7 @@ import io.github.alkarn.open.flashcards.dao.Noun;
 import io.github.alkarn.open.flashcards.dao.NounDto;
 import io.github.alkarn.open.flashcards.dao.NounQuestion;
 import io.github.alkarn.open.flashcards.dao.NounRepository;
+import io.github.alkarn.open.flashcards.dao.results.NounTestResult;
 
 public class EvaluatorImpl implements Evaluator {
 
@@ -47,18 +48,10 @@ public class EvaluatorImpl implements Evaluator {
     }
 
     @Override
-    public boolean evaluateUserAnswer(NounQuestion nounQuestion) throws Exception {
-        if (nounQuestion.getUserTranslation() == null || nounQuestion.getUserTranslation().isEmpty() ||
-            nounQuestion.getUserArticle() == null || nounQuestion.getUserArticle().isEmpty()) {
-            return false;
-        }
-
+    public NounTestResult evaluateUserAnswer(NounQuestion nounQuestion) throws Exception {
         Optional<Noun> noun = nounRepository.findById(nounQuestion.getLiteral());
         if (noun.isPresent()) {
-            if (noun.get().getTranslation().equals(nounQuestion.getUserTranslation()) && noun.get().getArticle().equals(nounQuestion.getUserArticle())) {
-                return true;
-            } else
-                return false;
+            return new NounTestResult(noun.get(), nounQuestion);
         } else {
             // TODO This is an extreme case. How do we handle?
             throw new Exception();

@@ -2,6 +2,7 @@ package io.github.alkarn.tools;
 
 import io.github.alkarn.open.flashcards.dao.NounDto;
 import io.github.alkarn.open.flashcards.dao.NounQuestion;
+import io.github.alkarn.open.flashcards.dao.results.NounTestResult;
 
 public interface Evaluator {
 
@@ -11,6 +12,6 @@ public interface Evaluator {
 
     public String getErrorMessage(NounDto nounDto);
 
-    public boolean evaluateUserAnswer(NounQuestion nounQuestion) throws Exception;
+    public NounTestResult evaluateUserAnswer(NounQuestion nounQuestion) throws Exception;
 
 }

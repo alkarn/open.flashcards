@@ -13,7 +13,6 @@ import io.github.alkarn.open.flashcards.dao.NounRepository;
 import io.github.alkarn.open.flashcards.questioner.Questioner;
 import io.github.alkarn.tools.AddResult;
 import io.github.alkarn.tools.Evaluator;
-import io.github.alkarn.tools.TestResult;
 import io.github.alkarn.tools.Transformer;
 
 @Controller
@@ -62,6 +61,11 @@ public class FlashcardController {
 	    return "addNouns";
     }
 
+	@RequestMapping(value="/flashcards/test", method=RequestMethod.GET)
+    public String test(Model model) {
+        return "test";
+    }
+
 	@RequestMapping(value="/flashcards/test/nouns", method=RequestMethod.GET)
     public String testNounForm(Model model) {
         questioner.generateNounQuestion().ifPresent(q -> model.addAttribute("nounQuestion", q));
@@ -70,15 +74,8 @@ public class FlashcardController {
 
 	@RequestMapping(value="/flashcards/test/nouns", method=RequestMethod.POST)
 	public String testNounSubmit(Model model, @ModelAttribute NounQuestion nounQuestion) throws Exception {
-	    if (evaluator.evaluateUserAnswer(nounQuestion)) {
-	        model.addAttribute(TestResult.TEST_RESULT, TestResult.SUCCESS);
-	        model.addAttribute(TestResult.SUCCESS_MESSAGE, "Correct!");
-	        questioner.generateNounQuestion().ifPresent(q -> model.addAttribute("nounQuestion", q));
-	    } else {
-	        model.addAttribute(TestResult.TEST_RESULT, TestResult.ERROR);
-	        model.addAttribute(TestResult.ERROR_MESSAGE, "Wrong...");
-	        // TODO Show correct answer
-	    }
+	    model.addAttribute("nounQuestion", nounQuestion);
+	    model.addAttribute("testResult", evaluator.evaluateUserAnswer(nounQuestion));
 	    return "testNouns";
 	}
 

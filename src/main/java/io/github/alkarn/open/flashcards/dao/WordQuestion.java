@@ -1,12 +1,14 @@
 package io.github.alkarn.open.flashcards.dao;
 
-public class NounQuestionDto {
+public class WordQuestion {
 
     private String literal;
     private String helpPhrase;
     private String userTranslation;
-    private String userArticle;
 
+    public WordQuestion(String literal) {
+        this.literal = literal;
+    }
     public String getLiteral() {
         return literal;
     }
@@ -24,12 +26,6 @@ public class NounQuestionDto {
     }
     public void setUserTranslation(String userTranslation) {
         this.userTranslation = userTranslation;
-    }
-    public String getUserArticle() {
-        return userArticle;
-    }
-    public void setUserArticle(String userArticle) {
-        this.userArticle = userArticle;
     }
 
 }
