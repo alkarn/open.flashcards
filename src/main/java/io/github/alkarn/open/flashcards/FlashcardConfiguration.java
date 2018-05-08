@@ -5,10 +5,10 @@ import org.springframework.context.annotation.Configuration;
 
 import io.github.alkarn.open.flashcards.questioner.MongoQuestioner;
 import io.github.alkarn.open.flashcards.questioner.Questioner;
-import io.github.alkarn.tools.Evaluator;
-import io.github.alkarn.tools.EvaluatorImpl;
-import io.github.alkarn.tools.Transformer;
-import io.github.alkarn.tools.TransformerImpl;
+import io.github.alkarn.utils.Evaluator;
+import io.github.alkarn.utils.EvaluatorImpl;
+import io.github.alkarn.utils.Transformer;
+import io.github.alkarn.utils.TransformerImpl;
 
 @Configuration
 public class FlashcardConfiguration {

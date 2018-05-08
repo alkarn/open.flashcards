@@ -1,4 +1,4 @@
-package io.github.alkarn.tools;
+package io.github.alkarn.utils;
 
 public interface Administration {
 

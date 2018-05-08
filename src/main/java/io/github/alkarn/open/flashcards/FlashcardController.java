@@ -11,9 +11,9 @@ import io.github.alkarn.open.flashcards.dao.NounDto;
 import io.github.alkarn.open.flashcards.dao.NounQuestion;
 import io.github.alkarn.open.flashcards.dao.NounRepository;
 import io.github.alkarn.open.flashcards.questioner.Questioner;
-import io.github.alkarn.tools.AddResult;
-import io.github.alkarn.tools.Evaluator;
-import io.github.alkarn.tools.Transformer;
+import io.github.alkarn.utils.AddResult;
+import io.github.alkarn.utils.Evaluator;
+import io.github.alkarn.utils.Transformer;
 
 @Controller
 public class FlashcardController {

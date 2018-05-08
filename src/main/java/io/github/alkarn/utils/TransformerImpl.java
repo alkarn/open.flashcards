@@ -1,4 +1,4 @@
-package io.github.alkarn.tools;
+package io.github.alkarn.utils;
 
 import io.github.alkarn.open.flashcards.dao.Noun;
 import io.github.alkarn.open.flashcards.dao.NounDto;
