@@ -1,5 +1,7 @@
 package io.github.alkarn.utils;
 
+import io.github.alkarn.open.flashcards.dao.Adjective;
+import io.github.alkarn.open.flashcards.dao.AdjectiveDto;
 import io.github.alkarn.open.flashcards.dao.Adverb;
 import io.github.alkarn.open.flashcards.dao.AdverbDto;
 import io.github.alkarn.open.flashcards.dao.Noun;
@@ -15,6 +17,11 @@ public class TransformerImpl implements Transformer {
     @Override
     public Adverb transform(AdverbDto adverbDto) {
         return new Adverb(adverbDto.getLiteral(), adverbDto.getTranslation(), adverbDto.getHelpPhrase());
+    }
+
+    @Override
+    public Adjective transform(AdjectiveDto adjectiveDto) {
+        return new Adjective(adjectiveDto.getLiteral(), adjectiveDto.getTranslation(), adjectiveDto.getHelpPhrase());
     }
 
 }

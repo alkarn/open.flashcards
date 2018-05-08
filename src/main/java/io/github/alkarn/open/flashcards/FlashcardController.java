@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import io.github.alkarn.open.flashcards.dao.AdjectiveDto;
+import io.github.alkarn.open.flashcards.dao.AdjectiveQuestion;
+import io.github.alkarn.open.flashcards.dao.AdjectiveRepository;
 import io.github.alkarn.open.flashcards.dao.AdverbDto;
 import io.github.alkarn.open.flashcards.dao.AdverbQuestion;
 import io.github.alkarn.open.flashcards.dao.AdverbRepository;
@@ -27,6 +30,9 @@ public class FlashcardController {
 
     @Autowired
     private AdverbRepository adverbRepository;
+
+    @Autowired
+    private AdjectiveRepository adjectiveRepository;
 
 	@Autowired
 	private Evaluator evaluator;
@@ -71,6 +77,18 @@ public class FlashcardController {
         return "addAdverbs";
     }
 
+    @RequestMapping(value = "/flashcards/add/adjectives", method = RequestMethod.GET)
+    public String addAdjectiveForm(Model model) {
+        model.addAttribute("adjective", new AdjectiveDto());
+        return "addAdjectives";
+    }
+
+    @RequestMapping(value="/flashcards/add/adjectives", method=RequestMethod.POST)
+    public String addAdjectiveSubmit(Model model, @ModelAttribute AdjectiveDto newAdjective) {
+        addWordSubmit(model, newAdjective);
+        return "addAdjectives";
+    }
+
     public void addWordSubmit(Model model, WordDto newWord) {
         if (evaluator.isValid(newWord)) {
             if (newWord instanceof NounDto) {
@@ -79,6 +97,10 @@ public class FlashcardController {
             } else if (newWord instanceof AdverbDto) {
                 adverbRepository.save(transformer.transform((AdverbDto) newWord));
                 model.addAttribute("adverb", new AdverbDto());
+            } else if (newWord instanceof AdjectiveDto) {
+                adjectiveRepository.save(transformer.transform((AdjectiveDto) newWord));
+                model.addAttribute("adjective", new AdjectiveDto());
+
             }
             model.addAttribute(AddResult.ADD_RESULT, AddResult.SUCCESS);
             model.addAttribute(AddResult.SUCCESS_MESSAGE, evaluator.getSuccessMessage(newWord));
@@ -89,6 +111,8 @@ public class FlashcardController {
                 model.addAttribute("noun", newWord);
             } else if (newWord instanceof AdverbDto) {
                 model.addAttribute("adverb", newWord);
+            } else if (newWord instanceof AdjectiveDto) {
+                model.addAttribute("adjective", newWord);
             }
         }
     }
@@ -122,6 +146,19 @@ public class FlashcardController {
         model.addAttribute("adverbQuestion", adverbQuestion);
         model.addAttribute("testResult", evaluator.evaluateUserAnswer(adverbQuestion));
         return "testAdverbs";
+    }
+
+    @RequestMapping(value = "/flashcards/test/adjectives", method = RequestMethod.GET)
+    public String testAdjectiveForm(Model model) {
+        questioner.generateAdjectiveQuestion().ifPresent(q -> model.addAttribute("adjectiveQuestion", q));
+        return "testAdjectives";
+    }
+
+    @RequestMapping(value = "/flashcards/test/adjectives", method = RequestMethod.POST)
+    public String testAdjectiveSubmit(Model model, @ModelAttribute AdjectiveQuestion adjectiveQuestion) throws Exception {
+        model.addAttribute("adjectiveQuestion", adjectiveQuestion);
+        model.addAttribute("testResult", evaluator.evaluateUserAnswer(adjectiveQuestion));
+        return "testAdjectives";
     }
 
 }
