@@ -4,17 +4,24 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import io.github.alkarn.open.flashcards.dao.Adverb;
+import io.github.alkarn.open.flashcards.dao.AdverbQuestion;
+import io.github.alkarn.open.flashcards.dao.AdverbRepository;
 import io.github.alkarn.open.flashcards.dao.Noun;
 import io.github.alkarn.open.flashcards.dao.NounDto;
 import io.github.alkarn.open.flashcards.dao.NounQuestion;
 import io.github.alkarn.open.flashcards.dao.NounRepository;
 import io.github.alkarn.open.flashcards.dao.WordDto;
+import io.github.alkarn.open.flashcards.dao.results.AdverbTestResult;
 import io.github.alkarn.open.flashcards.dao.results.NounTestResult;
 
 public class EvaluatorImpl implements Evaluator {
 
     @Autowired
     private NounRepository nounRepository;
+
+    @Autowired
+    private AdverbRepository adverbRepository;
 
 
     @Override
@@ -66,6 +73,17 @@ public class EvaluatorImpl implements Evaluator {
             throw new Exception();
         }
 
+    }
+
+    @Override
+    public AdverbTestResult evaluateUserAnswer(AdverbQuestion adverbQuestion) throws Exception {
+        Optional<Adverb> adverb = adverbRepository.findById(adverbQuestion.getLiteral());
+        if (adverb.isPresent()) {
+            return new AdverbTestResult(adverb.get(), adverbQuestion);
+        } else {
+            // TODO This is an extreme case. How do we handle?
+            throw new Exception();
+        }
     }
 
 }

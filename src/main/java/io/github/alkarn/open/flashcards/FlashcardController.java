@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import io.github.alkarn.open.flashcards.dao.AdverbDto;
+import io.github.alkarn.open.flashcards.dao.AdverbQuestion;
 import io.github.alkarn.open.flashcards.dao.AdverbRepository;
 import io.github.alkarn.open.flashcards.dao.NounDto;
 import io.github.alkarn.open.flashcards.dao.NounQuestion;
@@ -109,5 +110,18 @@ public class FlashcardController {
 	    model.addAttribute("testResult", evaluator.evaluateUserAnswer(nounQuestion));
 	    return "testNouns";
 	}
+
+    @RequestMapping(value = "/flashcards/test/adverbs", method = RequestMethod.GET)
+    public String testAdverbForm(Model model) {
+        questioner.generateAdverbQuestion().ifPresent(q -> model.addAttribute("adverbQuestion", q));
+        return "testAdverbs";
+    }
+
+    @RequestMapping(value = "/flashcards/test/adverbs", method = RequestMethod.POST)
+    public String testAdverbSubmit(Model model, @ModelAttribute AdverbQuestion adverbQuestion) throws Exception {
+        model.addAttribute("adverbQuestion", adverbQuestion);
+        model.addAttribute("testResult", evaluator.evaluateUserAnswer(adverbQuestion));
+        return "testAdverbs";
+    }
 
 }

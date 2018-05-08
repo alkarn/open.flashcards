@@ -7,6 +7,9 @@ import java.util.Queue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import io.github.alkarn.open.flashcards.dao.Adverb;
+import io.github.alkarn.open.flashcards.dao.AdverbQuestion;
+import io.github.alkarn.open.flashcards.dao.AdverbRepository;
 import io.github.alkarn.open.flashcards.dao.Noun;
 import io.github.alkarn.open.flashcards.dao.NounQuestion;
 import io.github.alkarn.open.flashcards.dao.NounRepository;
@@ -17,7 +20,11 @@ public class MongoQuestioner implements Questioner {
     @Autowired
     private NounRepository nounRepository;
 
+    @Autowired
+    private AdverbRepository adverbRepository;
+
     private Queue<Noun> nounsToBeAsked = new LinkedList<>();
+    private Queue<Adverb> adverbsToBeAsked = new LinkedList<>();
 
     @Override
     public Optional<NounQuestion> generateNounQuestion() {
@@ -25,6 +32,14 @@ public class MongoQuestioner implements Questioner {
             nounRepository.findAll().stream().forEach(noun -> nounsToBeAsked.add(noun));
         }
         return Optional.ofNullable(new NounQuestion(nounsToBeAsked.poll().getLiteral()));
+    }
+
+    @Override
+    public Optional<AdverbQuestion> generateAdverbQuestion() {
+        if (adverbsToBeAsked.isEmpty()) {
+            adverbRepository.findAll().stream().forEach(noun -> adverbsToBeAsked.add(noun));
+        }
+        return Optional.ofNullable(new AdverbQuestion(adverbsToBeAsked.poll().getLiteral()));
     }
 
 }
