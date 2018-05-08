@@ -7,9 +7,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import io.github.alkarn.open.flashcards.dao.AdverbDto;
+import io.github.alkarn.open.flashcards.dao.AdverbRepository;
 import io.github.alkarn.open.flashcards.dao.NounDto;
 import io.github.alkarn.open.flashcards.dao.NounQuestion;
 import io.github.alkarn.open.flashcards.dao.NounRepository;
+import io.github.alkarn.open.flashcards.dao.WordDto;
 import io.github.alkarn.open.flashcards.questioner.Questioner;
 import io.github.alkarn.utils.AddResult;
 import io.github.alkarn.utils.Evaluator;
@@ -20,6 +23,9 @@ public class FlashcardController {
 
     @Autowired
     private NounRepository nounRepository;
+
+    @Autowired
+    private AdverbRepository adverbRepository;
 
 	@Autowired
 	private Evaluator evaluator;
@@ -48,17 +54,42 @@ public class FlashcardController {
 
 	@RequestMapping(value="/flashcards/add/nouns", method=RequestMethod.POST)
     public String addNounSubmit(Model model, @ModelAttribute NounDto newNoun) {
-	    if (evaluator.isValid(newNoun)) {
-	        nounRepository.save(transformer.transform(newNoun));
-	        model.addAttribute(AddResult.ADD_RESULT, AddResult.SUCCESS);
-	        model.addAttribute(AddResult.SUCCESS_MESSAGE, evaluator.getSuccessMessage(newNoun));
-	        model.addAttribute("noun", new NounDto());
-	    } else {
-	        model.addAttribute(AddResult.ADD_RESULT, AddResult.ERROR);
-	        model.addAttribute(AddResult.ERROR_MESSAGE, evaluator.getErrorMessage(newNoun));
-	        model.addAttribute("noun", newNoun);
-	    }
+	    addWordSubmit(model, newNoun);
 	    return "addNouns";
+    }
+
+    @RequestMapping(value = "/flashcards/add/adverbs", method = RequestMethod.GET)
+    public String addAdverbForm(Model model) {
+        model.addAttribute("adverb", new AdverbDto());
+        return "addAdverbs";
+    }
+
+    @RequestMapping(value="/flashcards/add/adverbs", method=RequestMethod.POST)
+    public String addAdverbSubmit(Model model, @ModelAttribute AdverbDto newAdverb) {
+        addWordSubmit(model, newAdverb);
+        return "addAdverbs";
+    }
+
+    public void addWordSubmit(Model model, WordDto newWord) {
+        if (evaluator.isValid(newWord)) {
+            if (newWord instanceof NounDto) {
+                nounRepository.save(transformer.transform((NounDto) newWord));
+                model.addAttribute("noun", new NounDto());
+            } else if (newWord instanceof AdverbDto) {
+                adverbRepository.save(transformer.transform((AdverbDto) newWord));
+                model.addAttribute("adverb", new AdverbDto());
+            }
+            model.addAttribute(AddResult.ADD_RESULT, AddResult.SUCCESS);
+            model.addAttribute(AddResult.SUCCESS_MESSAGE, evaluator.getSuccessMessage(newWord));
+        } else {
+            model.addAttribute(AddResult.ADD_RESULT, AddResult.ERROR);
+            model.addAttribute(AddResult.ERROR_MESSAGE, evaluator.getErrorMessage(newWord));
+            if (newWord instanceof NounDto) {
+                model.addAttribute("noun", newWord);
+            } else if (newWord instanceof AdverbDto) {
+                model.addAttribute("adverb", newWord);
+            }
+        }
     }
 
 	@RequestMapping(value="/flashcards/test", method=RequestMethod.GET)

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    
+    <title>Open Flashcards | Add Adverbs</title>
+    
+    <!-- Bootstrap 3.3.7 -->
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link>
+  </head>
+  <body>
+  
+    <div th:switch="${addResult}">
+	    <div th:case="success" class="alert alert-success">
+	      <label th:text="${successMessage}"></label>
+			</div>
+      <div th:case="error" class="alert alert-danger">
+        <label th:text="${errorMessage}"></label>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="row">
+        <div class="page-header">
+          <h1><a href="/flashcards">Open Flashcards</a></h1>
+        </div>
+      </div>
+      <div class="row">
+        <h2 class="col-sm-offset-2 text-primary">Add a new adverb</h2>
+        <br/>
+      </div>
+	    <div class="row">
+	      <form class="form-horizontal" action="#" th:action="@{/flashcards/add/adverbs}" th:object="${adverb}" method="post">
+		      <div class="form-group">
+		        <label for="adverb" class="col-sm-2 control-label">Adverb</label>
+		        <div class="col-sm-6">
+		          <input type="text" th:field="*{literal}" class="form-control" id="adverb" autofocus="autofocus" />
+		        </div>
+		      </div>
+		      <div class="form-group">
+		        <label for="translation" class="col-sm-2 control-label">Translation</label>
+		        <div class="col-sm-6">
+		          <input type="text" th:field="*{translation}" class="form-control" id="translation" />
+		        </div>
+		      </div>
+		      <div class="form-group">
+		        <label for="helpPhrase" class="col-sm-2 control-label">Help Phrase</label>
+		        <div class="col-sm-6">
+		          <textarea th:field="*{helpPhrase}" class="form-control" id="helpPhrase">Insert help phrase...</textarea>
+		        </div>
+		      </div>
+		      <div class="form-group">
+		        <div class="col-sm-offset-2 col-sm-10">
+		            <button type="submit" class="btn btn-info">Add</button>
+		        </div>
+		      </div>
+		    </form>    
+	    </div>
+	  </div>
+		
+    <!-- Bootstrap 3.3.7 -->
+    <script th:src="@{/webjars/bootstrap/3.3.7/js/bootstrap.min.js}" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  </body>
+</html>
