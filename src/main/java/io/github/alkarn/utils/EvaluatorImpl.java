@@ -1,5 +1,6 @@
 package io.github.alkarn.utils;
 
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +15,15 @@ import io.github.alkarn.open.flashcards.dao.Noun;
 import io.github.alkarn.open.flashcards.dao.NounDto;
 import io.github.alkarn.open.flashcards.dao.NounQuestion;
 import io.github.alkarn.open.flashcards.dao.NounRepository;
+import io.github.alkarn.open.flashcards.dao.Verb;
+import io.github.alkarn.open.flashcards.dao.VerbDto;
+import io.github.alkarn.open.flashcards.dao.VerbQuestion;
+import io.github.alkarn.open.flashcards.dao.VerbRepository;
 import io.github.alkarn.open.flashcards.dao.WordDto;
 import io.github.alkarn.open.flashcards.dao.results.AdjectiveTestResult;
 import io.github.alkarn.open.flashcards.dao.results.AdverbTestResult;
 import io.github.alkarn.open.flashcards.dao.results.NounTestResult;
+import io.github.alkarn.open.flashcards.dao.results.VerbTestResult;
 
 public class EvaluatorImpl implements Evaluator {
 
@@ -30,6 +36,9 @@ public class EvaluatorImpl implements Evaluator {
     @Autowired
     private AdjectiveRepository adjectiveRepository;
 
+    @Autowired
+    private VerbRepository verbRepository;
+
 
     @Override
     public boolean isValid(WordDto wordDto) {
@@ -39,6 +48,17 @@ public class EvaluatorImpl implements Evaluator {
         }
         if (wordDto instanceof NounDto) {
             return (((NounDto) wordDto).getArticle() == null || ((NounDto) wordDto).getArticle().isEmpty()) ? false : true;
+        } else if (wordDto instanceof VerbDto) {
+            Map<String, String> simplePresent = ((VerbDto) wordDto).getSimplePresent();
+            if (simplePresent == null) {
+                return false;
+            }
+            for (String value : simplePresent.values()) {
+                if (value == null || value.isEmpty()) {
+                    return false;
+                }
+            }
+            return true;
         } else {
             return true;
         }
@@ -65,6 +85,16 @@ public class EvaluatorImpl implements Evaluator {
         if (wordDto instanceof NounDto) {
             if (((NounDto) wordDto).getArticle() == null || ((NounDto) wordDto).getArticle().isEmpty()) {
                 return "Please fill article";
+            }
+        } else if (wordDto instanceof VerbDto) {
+            Map<String, String> simplePresent = ((VerbDto) wordDto).getSimplePresent();
+            if (simplePresent == null) {
+                return "Please fill simple present";
+            }
+            for (String personalPronoun : simplePresent.keySet()) {
+                if (simplePresent.get(personalPronoun) == null || simplePresent.get(personalPronoun).isEmpty()) {
+                    return "Plese fill simple present for " + personalPronoun;
+                }
             }
         }
         return null;
@@ -98,6 +128,17 @@ public class EvaluatorImpl implements Evaluator {
         Optional<Adjective> adjective = adjectiveRepository.findById(adjectiveQuestion.getLiteral());
         if (adjective.isPresent()) {
             return new AdjectiveTestResult(adjective.get(), adjectiveQuestion);
+        } else {
+            // TODO This is an extreme case. How do we handle?
+            throw new Exception();
+        }
+    }
+
+    @Override
+    public VerbTestResult evaluateUserAnswer(VerbQuestion verbQuestion) throws Exception {
+        Optional<Verb> verb = verbRepository.findById(verbQuestion.getLiteral());
+        if (verb.isPresent()) {
+            return new VerbTestResult(verb.get(), verbQuestion);
         } else {
             // TODO This is an extreme case. How do we handle?
             throw new Exception();

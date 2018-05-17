@@ -6,6 +6,8 @@ import io.github.alkarn.open.flashcards.dao.Adverb;
 import io.github.alkarn.open.flashcards.dao.AdverbDto;
 import io.github.alkarn.open.flashcards.dao.Noun;
 import io.github.alkarn.open.flashcards.dao.NounDto;
+import io.github.alkarn.open.flashcards.dao.Verb;
+import io.github.alkarn.open.flashcards.dao.VerbDto;
 
 public class TransformerImpl implements Transformer {
 
@@ -22,6 +24,11 @@ public class TransformerImpl implements Transformer {
     @Override
     public Adjective transform(AdjectiveDto adjectiveDto) {
         return new Adjective(adjectiveDto.getLiteral(), adjectiveDto.getTranslation(), adjectiveDto.getHelpPhrase());
+    }
+
+    @Override
+    public Verb transform(VerbDto verbDto) {
+        return new Verb(verbDto.getLiteral(), verbDto.getTranslation(), verbDto.getHelpPhrase(), verbDto.getSimplePresent());
     }
 
 }

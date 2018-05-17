@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    
+    <title>Open Flashcards | Test</title>
+    
+    <!-- Bootstrap 3.3.7 -->
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link>
+  </head>
+  <body>
+  
+    <div class="container">
+      <div class="row">
+        <div class="page-header">
+          <h1><a href="/flashcards">Open Flashcards</a></h1>
+        </div>
+      </div>
+      <div class="row">
+<!--         <h2 class="col-sm-offset-2 text-warning">Test: <span th:text="${question.word.literate}"></span></h2> -->
+        <br/>
+      </div>
+      <div class="row">
+        <form class="form-horizontal" action="#" th:action="@{/flashcards/test/verbs}" th:object="${verbQuestion}" method="post">
+          <div class="form-group">
+            <label class="col-sm-2 control-label" th:text="*{literal}"></label>
+            <input th:field="*{literal}" id="literal" type="hidden"/>
+          </div>
+          <div class="form-group">
+            <label for="translation" class="col-sm-2 control-label">Translation</label>
+            <div class="col-sm-6">
+              <input type="text" th:field="*{userTranslation}" class="form-control" id="translation"  th:autofocus="${testResult == null}"/>
+            </div>
+            <div class="col-sm-4" th:switch="${testResult?.isTranslationCorrect()}">
+              <p th:case="true"><span class="glyphicon glyphicon-ok text-success" ></span></p>
+              <p th:case="false"><span class="glyphicon glyphicon-remove text-danger" ></span> <label class="text-danger" th:text="${testResult.getCorrectTranslation()}"></label></p>
+            </div>
+          </div>
+          <div class="form-group" th:each="sp : *{simplePresent}">
+            <label class="col-sm-2 control-label text-muted" th:text="${sp.key}"></label>
+              <div class="col-sm-6">
+                <input type="text" th:field="*{simplePresent[__${sp.key}__]}" class="form-control" />
+              </div>
+              <div class="col-sm-4" th:switch="${testResult?.isSimplePresentCorrect(sp.key)}">
+<!--               <div class="col-sm-4" th:switch="${testResult?.isSimplePresentCorrect[__${sp.key}__]}"> -->
+                <p th:case="true"><span class="glyphicon glyphicon-ok text-success" ></span></p>
+                <p th:case="false"><span class="glyphicon glyphicon-remove text-danger" ></span> <label class="text-danger" th:text="${testResult.getCorrectSimplePresent(sp.key)}"></label></p>
+              </div>
+          </div>
+          <div th:if="${testResult == null}" class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+              <button type="submit" class="btn btn-warning">Answer</button>
+              <button class="btn btn-default" type="button" data-toggle="collapse" data-target="#collapsedHelpPhrase" aria-expanded="false" aria-controls="helpPhrase">
+               Help
+              </button>
+            </div>
+          </div>
+        </form>
+        <form class="form-horizontal" action="#" th:action="@{/flashcards/test/verbs}" th:object="${verbQuestion}" method="get">
+          <div th:if="${testResult != null}" class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+              <button type="submit" class="btn btn-warning" autofocus="autofocus">Next</button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="row">
+        <div class="collapse" id="collapsedHelpPhrase">
+	      <div class="col-sm-6 col-sm-offset-2 panel panel-default">
+	        <div class="panel-body">
+	          <p th:text="${verbQuestion.helpPhrase}"></p>
+	        </div>
+	      </div>
+	    </div>
+      </div>
+    </div>
+	
+    <!-- Bootstrap 3.3.7 -->
+    <script th:src="@{/webjars/bootstrap/3.3.7/js/bootstrap.min.js}" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  </body>
+</html>

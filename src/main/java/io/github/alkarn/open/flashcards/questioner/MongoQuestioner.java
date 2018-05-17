@@ -16,6 +16,9 @@ import io.github.alkarn.open.flashcards.dao.AdverbRepository;
 import io.github.alkarn.open.flashcards.dao.Noun;
 import io.github.alkarn.open.flashcards.dao.NounQuestion;
 import io.github.alkarn.open.flashcards.dao.NounRepository;
+import io.github.alkarn.open.flashcards.dao.Verb;
+import io.github.alkarn.open.flashcards.dao.VerbQuestion;
+import io.github.alkarn.open.flashcards.dao.VerbRepository;
 
 @Component
 public class MongoQuestioner implements Questioner {
@@ -29,9 +32,13 @@ public class MongoQuestioner implements Questioner {
     @Autowired
     private AdjectiveRepository adjectiveRepository;
 
+    @Autowired
+    private VerbRepository verbRepository;
+
     private Queue<Noun> nounsToBeAsked = new LinkedList<>();
     private Queue<Adverb> adverbsToBeAsked = new LinkedList<>();
     private Queue<Adjective> adjectivesToBeAsked = new LinkedList<>();
+    private Queue<Verb> verbsToBeAsked = new LinkedList<>();
 
     @Override
     public Optional<NounQuestion> generateNounQuestion() {
@@ -55,6 +62,14 @@ public class MongoQuestioner implements Questioner {
             adjectiveRepository.findAll().stream().forEach(adjective -> adjectivesToBeAsked.add(adjective));
         }
         return Optional.ofNullable(new AdjectiveQuestion(adjectivesToBeAsked.poll().getLiteral()));
+    }
+
+    @Override
+    public Optional<VerbQuestion> generateVerbQuestion() {
+        if (verbsToBeAsked.isEmpty()) {
+            verbRepository.findAll().stream().forEach(verb -> verbsToBeAsked.add(verb));
+        }
+        return Optional.ofNullable(new VerbQuestion(verbsToBeAsked.poll().getLiteral()));
     }
 
 }
