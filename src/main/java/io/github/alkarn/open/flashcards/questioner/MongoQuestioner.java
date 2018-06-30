@@ -24,8 +24,8 @@ import io.github.alkarn.open.flashcards.dao.VerbRepository;
 @Component
 public class MongoQuestioner implements Questioner {
 
-    private static int GET_PAGE = 1;
-    private static int PAGE_SIZE = 1;
+    private static int GET_PAGE = 0;
+    private static int PAGE_SIZE = 10;
 
     @Autowired
     private NounRepository nounRepository;
