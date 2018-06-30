@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.Queue;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 import io.github.alkarn.open.flashcards.dao.Adjective;
@@ -22,6 +23,9 @@ import io.github.alkarn.open.flashcards.dao.VerbRepository;
 
 @Component
 public class MongoQuestioner implements Questioner {
+
+    private static int GET_PAGE = 1;
+    private static int PAGE_SIZE = 1;
 
     @Autowired
     private NounRepository nounRepository;
@@ -43,7 +47,7 @@ public class MongoQuestioner implements Questioner {
     @Override
     public Optional<NounQuestion> generateNounQuestion() {
         if (nounsToBeAsked.isEmpty()) {
-            nounRepository.findAll().stream().forEach(noun -> nounsToBeAsked.add(noun));
+            nounRepository.findAll(PageRequest.of(GET_PAGE, PAGE_SIZE)).stream().forEach(noun -> nounsToBeAsked.add(noun));
         }
         return Optional.ofNullable(new NounQuestion(nounsToBeAsked.poll().getLiteral()));
     }
@@ -51,7 +55,7 @@ public class MongoQuestioner implements Questioner {
     @Override
     public Optional<AdverbQuestion> generateAdverbQuestion() {
         if (adverbsToBeAsked.isEmpty()) {
-            adverbRepository.findAll().stream().forEach(adverb -> adverbsToBeAsked.add(adverb));
+            adverbRepository.findAll(PageRequest.of(GET_PAGE, PAGE_SIZE)).stream().forEach(adverb -> adverbsToBeAsked.add(adverb));
         }
         return Optional.ofNullable(new AdverbQuestion(adverbsToBeAsked.poll().getLiteral()));
     }
@@ -59,7 +63,7 @@ public class MongoQuestioner implements Questioner {
     @Override
     public Optional<AdjectiveQuestion> generateAdjectiveQuestion() {
         if (adjectivesToBeAsked.isEmpty()) {
-            adjectiveRepository.findAll().stream().forEach(adjective -> adjectivesToBeAsked.add(adjective));
+            adjectiveRepository.findAll(PageRequest.of(GET_PAGE, PAGE_SIZE)).stream().forEach(adjective -> adjectivesToBeAsked.add(adjective));
         }
         return Optional.ofNullable(new AdjectiveQuestion(adjectivesToBeAsked.poll().getLiteral()));
     }
@@ -67,7 +71,7 @@ public class MongoQuestioner implements Questioner {
     @Override
     public Optional<VerbQuestion> generateVerbQuestion() {
         if (verbsToBeAsked.isEmpty()) {
-            verbRepository.findAll().stream().forEach(verb -> verbsToBeAsked.add(verb));
+            verbRepository.findAll(PageRequest.of(GET_PAGE, PAGE_SIZE)).stream().forEach(verb -> verbsToBeAsked.add(verb));
         }
         return Optional.ofNullable(new VerbQuestion(verbsToBeAsked.poll().getLiteral()));
     }
